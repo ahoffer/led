@@ -3,61 +3,59 @@
 import RPi.GPIO as io
 import time
 import requests
+from signal import Signal
 
-red_light = 19
-green_light = 26
-button = 13
+red_pin = 19
+green_pin = 26
+signal = Signal(red_pin,green_pin)
+
+button_pin = 13
 io.setmode(io.BCM)
 io.setwarnings(False)
-io.setup(red_light, io.OUT)
-io.setup(green_light, io.OUT)
-io.setup(button, io.IN, pull_up_down=io.PUD_UP)
-#io.setup(button, io.IN, pull_up_down=io.PUD_DOWN)
+io.setup(button_pin, io.IN, pull_up_down=io.PUD_UP)
 
 youtubeRule = '.*youtube\.com.*'
-
-def set(channel, on):
-    if on:
-        io.output(channel, io.HIGH)
-    else:
-        io.output(channel, io.LOW)
 
 def isYouTubeBlocked():
     response = requests.get('http://hole:5000/block/regex')
     #print(response.text)
-    if 'youtube' in response.text.lower():
-        return True
-    else:
-        return False
+    return 'youtube' in response.text.lower()
 
 def signalYouTubeStatus():
-    blocked = isYouTubeBlocked()
-    set(red_light, blocked)
-    set(green_light, not blocked)
+    try:
+        blocked = isYouTubeBlocked()
+        signal.show(blocked)
+    except:
+        signal.alternate()
 
 def button_callback(channel):
+    # Sleep for at least 100 ms to prevent switch bounce.
+    # This sleep could be removed if the switch is de-bounced with a capacitor
     time.sleep(0.15)
     print('Detected button push')
     state = isYouTubeBlocked()
     #print(f'Current state={state}')
+    signal.fast_blink(state)
     newState = not state
     updateYouTubeState(newState)
     #print(f'Is YouTube blocked: {isYouTubeBlocked()}')
 
-def updateYouTubeState(enableBlock):
-    #print(f'updateYouTubeState({enableBlock})')
-    if enableBlock:
-        r = requests.put('http://hole:5000/block/regex', data=youtubeRule)
-    else:
-        r = requests.delete('http://hole:5000/block/regex', data=youtubeRule)
-    #print(r.text)
+def updateYouTubeState(block):
+    try:
+        #print(f'updateYouTubeState({enableBlock})')
+        if block:
+            r = requests.put('http://hole:5000/block/regex', data=youtubeRule)
+        else:
+            r = requests.delete('http://hole:5000/block/regex', data=youtubeRule)
+        #print(r.text)
+    except:
+        signal.alternate()
 
-io.add_event_detect(button,io.RISING,callback=button_callback) 
-
+signal.alternate()
+io.add_event_detect(button_pin, io.RISING, callback=button_callback)
 try:
     while True:
-        time.sleep(0.10)
+        time.sleep(1)
         signalYouTubeStatus()
 finally:
-    io.output(red_light, 0)
-    io.output(green_light, 0)
+    io.cleanup()
