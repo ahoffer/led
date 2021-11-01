@@ -3,6 +3,7 @@ import time
 
 class Signal:
     def __init__(self, red_pin, green_pin):
+        io.setmode(io.BCM)
         self.red_pin = red_pin
         self.green_pin = green_pin
         io.setup(self.red_pin, io.OUT)
@@ -18,7 +19,7 @@ class Signal:
 
     def fast_blink(self,blocked):
         pin = self.red_pin if blocked else self.green_pin
-        io.PWM(pin, 50).start(50)
+        io.PWM(pin, 50).start(50
 
     def show(self, blocked):
         # If blocked, turn off green and turn on red
