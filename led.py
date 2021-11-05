@@ -22,7 +22,7 @@ def isYouTubeBlocked():
     return 'youtube' in response.text.lower()
 
 def signalYouTubeStatus():
-    print('youtube status')
+    # print('youtube status')
     try:
         blocked = isYouTubeBlocked()
         print(blocked)
@@ -36,11 +36,11 @@ def button_callback(channel):
     time.sleep(0.15)
     print('Detected button push')
     state = isYouTubeBlocked()
-    #print(f'Current state={state}')
+    # print(f'Current state={state}')
     signal.fast_blink(state)
     newState = not state
     updateYouTubeState(newState)
-    print(f'Is YouTube blocked: {isYouTubeBlocked()}')
+    # print(f'Is YouTube blocked: {isYouTubeBlocked()}')
 
 def updateYouTubeState(block):
     try:
@@ -53,7 +53,7 @@ def updateYouTubeState(block):
     except:
         signal.alternate()
 
-print('BEGIN')
+# print('BEGIN')
 signal.alternate()
 
 io.add_event_detect(button_pin, io.RISING, callback=button_callback)
