@@ -25,6 +25,7 @@ def signalYouTubeStatus():
     print('youtube status')
     try:
         blocked = isYouTubeBlocked()
+        print(blocked)
         signal.show(blocked)
     except:
         signal.alternate()
