@@ -36,12 +36,13 @@ def signalYouTubeStatus():
 def button_callback(channel):
     # Sleep for at least 100 ms to prevent switch bounce.
     # This sleep could probably be removed if the switch is de-bounced with a capacitor
-    time.sleep(0.15)
+    # time.sleep(0.15)
     if DEBUG:
         print('Detected button push')
     state = isYouTubeBlocked()
     # print(f'Current state={state}')
     signal.fast_blink(state)
+    time.sleep(5)
     newState = not state
     updateYouTubeState(newState)
     # print(f'Is YouTube blocked: {isYouTubeBlocked()}')
