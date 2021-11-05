@@ -33,11 +33,13 @@ def updateLights():
             print(f'blocked=={blocked}, changing=={change_in_progress}')
         if blocked:
             if change_in_progress:
+                print('----rfast----')
                 signal.fast_red()
             else:
                 signal.solid_red()
         else:
             if change_in_progress:
+                print('----gfast----')
                 signal.fast_green()
             else:
                 signal.solid_green()
@@ -54,7 +56,6 @@ def button_callback(channel):
     if DEBUG:
         print('Detected button push')
     state = isYouTubeBlocked()
-    updateLights()
     # print(f'Current state={state}')
     newState = not state
     updateYouTubeState(newState)
