@@ -1,6 +1,8 @@
 import RPi.GPIO as io
 import time
 
+io.setwarnings(False)
+
 class Signal:
     def __init__(self, red_pin, green_pin):
         io.setmode(io.BCM)
@@ -44,8 +46,8 @@ class Signal:
 
     def alternate(self):
         # Alternate LED every half second.
-        self.pwm_red.ChangeFrequency(1)
-        self.pwm_red.start(50)
+        self.red_pwm.ChangeFrequency(1)
+        self.red_pwm.start(50)
         time.sleep(0.5)
-        self.pwm_green.ChangeFrequency(1)
-        self.pwm_red.start(50)
+        self.green_pwm.ChangeFrequency(1)
+        self.green_pwm.start(50)
