@@ -16,6 +16,7 @@ class Signal:
 
 
     def _set(self, pwm, duty_cycle=100, hertz=1):
+        pwm.stop()
         pwm.ChangeFrequency(hertz)
         pwm.start(duty_cycle)
 
@@ -43,6 +44,7 @@ class Signal:
 
     def solid_red(self):
         print('SOLID RED')
+
         self._green_off(self)
         self._set(self.red_pwm, 100)
 
