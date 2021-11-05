@@ -21,7 +21,8 @@ youtubeRule = '.*youtube\.com.*'
 def isYouTubeBlocked():
     response = requests.get('http://hole:5000/block/regex')
     if DEBUG:
-        print(response.text)
+        pass
+        # print(response.text)
     return 'youtube' in response.text.lower()
 
 def signalYouTubeStatus():
