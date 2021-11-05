@@ -41,6 +41,7 @@ class Signal:
 
 
     def solid_red(self):
+        print('SOLID RED')
         self._green_off(self)
         self._set(self.red_pwm, 100)
 
