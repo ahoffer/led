@@ -26,10 +26,10 @@ class Signal:
     def fast_blink(self, blocked):
         if blocked:
             self.red_pwm.ChangeFrequency(50)
-            self.start(50)
+            self.red_pwm.start(50)
         else:
             self.green_pwm.ChangeFrequency(50)
-            self.start(50)
+            self.green_pwm.start(50)
 
     def show(self, blocked):
         # If blocked, turn off green and turn on red
