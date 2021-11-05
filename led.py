@@ -42,7 +42,8 @@ def updateLights():
             else:
                 signal.solid_green()
     except:
-        signal.blink()
+        pass
+        # signal.blink()
 
 def button_callback(channel):
     # Sleep for at least 100 ms to prevent switch bounce.
@@ -69,7 +70,8 @@ def updateYouTubeState(block):
             r = requests.delete('http://hole:5000/block/regex', data=youtubeRule)
         #print(r.text)
     except:
-        signal.blink()
+        pass
+        # signal.blink()
 
 signal.blink()
 io.add_event_detect(button_pin, io.RISING, callback=button_callback)
