@@ -30,6 +30,7 @@ class Signal:
 
     def blink(self):
         # Alternate LED every half second.
+        print('BLINK')
         self._set(self.red_pwm, 50)
         time.sleep(0.5)
         self._set(self.green_pwm, 50)
