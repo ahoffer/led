@@ -38,7 +38,7 @@ def button_callback(channel):
     signal.fast_blink(state)
     newState = not state
     updateYouTubeState(newState)
-    #print(f'Is YouTube blocked: {isYouTubeBlocked()}')
+    print(f'Is YouTube blocked: {isYouTubeBlocked()}')
 
 def updateYouTubeState(block):
     try:
@@ -51,10 +51,12 @@ def updateYouTubeState(block):
     except:
         signal.alternate()
 
+print('BEGIN')
 signal.alternate()
 
 io.add_event_detect(button_pin, io.RISING, callback=button_callback)
 
+print('Entering loop')
 try:
     while True:
         time.sleep(1)
