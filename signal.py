@@ -1,7 +1,9 @@
-import RPi.GPIO as io
 import time
 
+import RPi.GPIO as io
+
 io.setwarnings(False)
+
 
 class Signal:
     def __init__(self, red_pin, green_pin):
@@ -10,50 +12,45 @@ class Signal:
         self.green_pin = green_pin
         io.setup(self.red_pin, io.OUT)
         io.setup(self.green_pin, io.OUT)
-        self.green_pwm = io.PWM(self.green_pin, 10)
-        self.red_pwm = io.PWM(self.red_pin, 10)
+        self.green_pwm = io.PWM(self.green_pin, 1)
+        self.red_pwm = io.PWM(self.red_pin, 1)
 
-    def _set(self, green, red):
-        if green:
-            self.red_pwm.stop()
-            self.green_pwm.ChangeFrequency(1)
-            self.green_pwm.start(100)
-        if red:
-            self.green_pwm.stop()
-            self.red_pwm.ChangeFrequency(1)
-            self.red_pwm.start(100)
 
-    def fast_blink(self, blocked):
-        if blocked:
-            self.red_pwm.ChangeFrequency(50)
-            self.red_pwm.start(50)
-        else:
-            self.green_pwm.ChangeFrequency(50)
-            self.green_pwm.start(50)
+def _set(self, pwm, duty_cycle=100, hertz=1):
+    pwm.ChangeFrequency(hertz)
+    pwm.start(duty_cycle)
 
-    def show(self, blocked):
-        # If blocked, turn off green and turn on red
-        self._set(not blocked, blocked)
 
-    def all_off(self):
-        self._set(False, False)
+def _green_off(self):
+    self._set(self.green_pwm, 0)
 
-    def solid_green(self):
-        self._set(True, False)
 
-    def solid_red(self):
-        self._set(False, True)
+def _red_off(self):
+    self._set(self.red_pwm, 0)
 
-    def fast_green(self):
-        self.green_pwm(50)
 
-    def fast_red(self):
-        self.red_pwm(50)
+def blink(self):
+    # Alternate LED every half second.
+    self._set(self.red_pwm, 50)
+    time.sleep(0.5)
+    self._set(self.green_pwm, 50)
 
-    def alternate(self):
-        # Alternate LED every half second.
-        self.red_pwm.ChangeFrequency(1)
-        self.red_pwm.start(50)
-        time.sleep(0.5)
-        self.green_pwm.ChangeFrequency(1)
-        self.green_pwm.start(50)
+
+def solid_green(self):
+    _red_off(self)
+    _set(self.green_pwm, 100)
+
+
+def solid_red(self):
+    _green_off(self)
+    _set(self.red_pwm, 100)
+
+
+def fast_green(self):
+    _red_off()
+    _set(self.green_pwm, 50, 50)
+
+
+def fast_red(self):
+    _green_off()
+    _set(self.red_pwm, 50, 50)
