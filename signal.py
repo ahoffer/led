@@ -1,7 +1,6 @@
 import RPi.GPIO as io
 import time
 
-
 class Signal:
     def __init__(self, red_pin, green_pin):
         io.setmode(io.BCM)
