@@ -14,8 +14,14 @@ class Signal:
         self.red_pwm = io.PWM(self.red_pin, 10)
 
     def _set(self, green, red):
-        io.output(self.green_pin, green)
-        io.output(self.red_pin, red)
+        if green:
+            self.red_pwm.stop()
+            self.green_pwm.ChangeFrequency(1)
+            self.green_pwm.start(100)
+        if red:
+            self.green_pwm.stop()
+            self.red_pwm.ChangeFrequency(1)
+            self.red_pwm.start(100)
 
     def fast_blink(self, blocked):
         if blocked:
