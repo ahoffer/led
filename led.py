@@ -5,6 +5,8 @@ import time
 import requests
 from signal import Signal
 
+DEBUG = True
+
 red_pin = 19
 green_pin = 26
 signal = Signal(red_pin,green_pin)
@@ -18,14 +20,15 @@ youtubeRule = '.*youtube\.com.*'
 
 def isYouTubeBlocked():
     response = requests.get('http://hole:5000/block/regex')
-    #print(response.text)
+    if DEBUG:
+        print(response.text)
     return 'youtube' in response.text.lower()
 
 def signalYouTubeStatus():
-    # print('youtube status')
     try:
         blocked = isYouTubeBlocked()
-        print(blocked)
+        if DEBUG:
+            print(f'youtube is blocked == {blocked}')
         signal.show(blocked)
     except:
         signal.alternate()
@@ -34,7 +37,8 @@ def button_callback(channel):
     # Sleep for at least 100 ms to prevent switch bounce.
     # This sleep could probably be removed if the switch is de-bounced with a capacitor
     time.sleep(0.15)
-    print('Detected button push')
+    if DEBUG:
+        print('Detected button push')
     state = isYouTubeBlocked()
     # print(f'Current state={state}')
     signal.fast_blink(state)
@@ -53,7 +57,6 @@ def updateYouTubeState(block):
     except:
         signal.alternate()
 
-# print('BEGIN')
 signal.alternate()
 
 io.add_event_detect(button_pin, io.RISING, callback=button_callback)
@@ -61,7 +64,7 @@ io.add_event_detect(button_pin, io.RISING, callback=button_callback)
 print('Entering loop')
 try:
     while True:
-        time.sleep(1)
+        time.sleep(0.5)
         signalYouTubeStatus()
 finally:
     io.cleanup()
