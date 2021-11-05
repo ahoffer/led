@@ -32,11 +32,15 @@ def updateLights():
         if DEBUG:
             print(f'blocked=={blocked}, changing=={change_in_progress}')
         if blocked:
-            if change_in_progress: signal.fast_red()
-            else: signal.solid_red
+            if change_in_progress:
+                signal.fast_red()
+            else:
+                signal.solid_red()
         else:
-            if change_in_progress: signal.fast_green()
-            else: signal.solid_green()
+            if change_in_progress:
+                signal.fast_green()
+            else:
+                signal.solid_green()
     except:
         signal.blink()
 
