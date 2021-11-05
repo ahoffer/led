@@ -30,7 +30,7 @@ def updateLights():
     try:
         blocked = isYouTubeBlocked()
         if DEBUG:
-            print(f'youtube is blocked == {blocked}')
+            print(f'blocked=={blocked}, changing=={change_in_progress}')
         if blocked:
             if change_in_progress: signal.fast_red()
             else: signal.solid_red
