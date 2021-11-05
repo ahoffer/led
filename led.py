@@ -22,6 +22,7 @@ def isYouTubeBlocked():
     return 'youtube' in response.text.lower()
 
 def signalYouTubeStatus():
+    print('youtube status')
     try:
         blocked = isYouTubeBlocked()
         signal.show(blocked)
