@@ -1,6 +1,6 @@
 #! /usr/bin/python3
+
 import time
-from threading import Timer
 
 import RPi.GPIO as io
 import requests
@@ -44,7 +44,6 @@ def updateLights():
     except:
         signal.blink()
 
-
 def button_callback(channel):
     # Sleep for at least 100 ms to prevent switch bounce.
     # This sleep could probably be removed if the switch is de-bounced with a capacitor
@@ -71,10 +70,12 @@ def updateYouTubeState(block):
     except:
         signal.blink()
 
+
 def timer_callback():
     global timer
     timer.reset()
     updateYouTubeState(True)
+
 
 signal.blink()
 io.add_event_detect(button_pin, io.RISING, callback=button_callback)
