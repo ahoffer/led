@@ -1,16 +1,23 @@
 #! /usr/bin/python3
 
 import time
+import logging
 
 import RPi.GPIO as io
 import requests
-
+from logging.handlers import RotatingFileHandler
 from ResettableTimer import ResettableTimer
 from signal import Signal
 
 red_pin = 19
 green_pin = 26
 signal = Signal(red_pin, green_pin)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+handler = RotatingFileHandler(filename='logs/led.log',maxBytes=1024*256,backupCount=2)
+logger.addHandler(handler)
+formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s", "%Y-%m-%d %H:%M:%S")
+handler.setFormatter(formatter)
 
 button_pin = 13
 io.setmode(io.BCM)
@@ -45,12 +52,9 @@ def updateLights():
         signal.blink()
 
 def button_callback(channel):
-    # Sleep for at least 100 ms to prevent switch bounce.
-    # This sleep could probably be removed if the switch is de-bounced with a capacitor
-    # time.sleep(0.15)
     global change_in_progress
     change_in_progress = True
-    # print('Detected button push')
+    logger.info('Detected button push')
     state = isYouTubeBlocked()
     # print(f'Current state={state}')
     newState = not state
@@ -83,7 +87,7 @@ io.add_event_detect(button_pin, io.RISING, callback=button_callback)
 one_hour = 60 * 60
 timer = ResettableTimer(one_hour, timer_callback)
 timer.start()
-
+logger.info('Starting')
 try:
     while True:
         time.sleep(0.25)
