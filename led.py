@@ -2,6 +2,7 @@
 
 import time
 import logging
+import os
 
 import RPi.GPIO as io
 import requests
@@ -13,7 +14,7 @@ red_pin = 19
 green_pin = 26
 signal = Signal(red_pin, green_pin)
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger.setLevel(int(os.getenv('LOG_LEVEL')))
 handler = RotatingFileHandler(filename='led.log',maxBytes=1024*256,backupCount=2)
 logger.addHandler(handler)
 formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s", "%Y-%m-%d %H:%M:%S")
