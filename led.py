@@ -14,7 +14,7 @@ green_pin = 26
 signal = Signal(red_pin, green_pin)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-handler = RotatingFileHandler(filename='logs/led.log',maxBytes=1024*256,backupCount=2)
+handler = RotatingFileHandler(filename='led.log',maxBytes=1024*256,backupCount=2)
 logger.addHandler(handler)
 formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s", "%Y-%m-%d %H:%M:%S")
 handler.setFormatter(formatter)
@@ -30,17 +30,16 @@ change_in_progress = False
 
 def isYouTubeBlocked():
     response = requests.get('http://hole:5000/block/regex')
-
-    # YouTube is enabled if either it is not in the list of blocked sites, or 
-    # if it is in the list, but is disabled.
-    enabled = ["enabled" in line for line in response.text.split('\n') if "youtube" in line]
-    return not enabled 
+    # YouTube is blocked if it is in the list of rules and the rule is enabled.
+    #print(response.text)
+    blocked = [line for line in response.text.split('\n') if "youtube" in line and "enabled" in line]
+    return blocked
 
 
 def updateLights():
     try:
         blocked = isYouTubeBlocked()
-        # print(f'blocked=={blocked}, changing=={change_in_progress}')
+        logger.debug(f'blocked=={blocked}, changing=={change_in_progress}')
         if blocked:
             if change_in_progress:
                 signal.fast_red()
@@ -59,11 +58,9 @@ def button_callback(channel):
     change_in_progress = True
     logger.info('Detected button push')
     state = isYouTubeBlocked()
-    # print(f'Current state={state}')
     newState = not state
     updateYouTubeState(newState)
     change_in_progress = False
-    # print(f'Is YouTube blocked: {isYouTubeBlocked()}')
 
 
 def updateYouTubeState(block):
@@ -83,7 +80,7 @@ def timer_callback():
     timer.reset()
     updateYouTubeState(True)
 
-
+logger.info('Start')
 signal.blink()
 
 # Register function to call when button is pressed
@@ -100,4 +97,5 @@ try:
         updateLights()
 finally:
     signal.all_off()
+    logger.info('End')
     io.cleanup()
