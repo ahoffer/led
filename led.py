@@ -30,8 +30,11 @@ change_in_progress = False
 
 def isYouTubeBlocked():
     response = requests.get('http://hole:5000/block/regex')
-    # print(response.text)
-    return 'youtube' in response.text.lower()
+
+    # YouTube is enabled if either it is not in the list of blocked sites, or 
+    # if it is in the list, but is disabled.
+    enabled = ["enabled" in line for line in response.text.split('\n') if "youtube" in line]
+    return not enabled 
 
 
 def updateLights():
@@ -82,15 +85,19 @@ def timer_callback():
 
 
 signal.blink()
+
+# Register function to call when button is pressed
 io.add_event_detect(button_pin, io.RISING, callback=button_callback)
 
+# Set up timer to turn off YouTube if left on for too long
 one_hour = 60 * 60
 timer = ResettableTimer(one_hour, timer_callback)
 timer.start()
-logger.info('Starting')
+
 try:
     while True:
         time.sleep(0.25)
         updateLights()
 finally:
+    signal.all_off()
     io.cleanup()

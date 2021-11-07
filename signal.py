@@ -56,3 +56,8 @@ class Signal:
     def fast_red(self):
         self._green_off()
         self._set_fast(self.red_pwm)
+
+    def all_off(self):
+        self._green_off()
+        self._red_off()
+
