@@ -39,12 +39,12 @@ class Signal:
         self._set(self.green_pwm, 50, 2)
 
     def solid_green(self):
-        # print('SOLID GREEN')
+        #print('SOLID GREEN')
         self._red_off()
         self._set(self.green_pwm, 100, 100)
 
     def solid_red(self):
-        # print('SOLID RED')
+        #print('SOLID RED')
         self._green_off()
         self._set_solid(self.red_pwm)
 
@@ -56,3 +56,8 @@ class Signal:
     def fast_red(self):
         self._green_off()
         self._set_fast(self.red_pwm)
+
+    def all_off(self):
+        self._green_off()
+        self._red_off()
+
