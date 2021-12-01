@@ -1,5 +1,6 @@
 from threading import Timer
 
+
 class ResettableTimer(object):
     def __init__(self, interval, function, args=None):
         self.interval = interval
