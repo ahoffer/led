@@ -61,6 +61,8 @@ class LampController(object):
 
 
 class ButtonController:
+    # Connect one pole of the button to the pin, connect
+    # the other pole to GND
     def __init__(self, pin, button_callback):
         io.setup(pin, io.IN, pull_up_down=io.PUD_UP)
         io.add_event_detect(pin, io.RISING, callback=button_callback)
