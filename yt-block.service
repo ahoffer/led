@@ -9,7 +9,7 @@ User=pi
 Group=pi
 Restart=on-failure
 RestartSec=5s
-Environment="PI_PASSWD="
+Environment="PI_PASSWD=%i"
 ExecStart=/usr/bin/python3 /home/pi/yt-block/run.py
 #ExecStart=PI_PASSWD=%i /usr/bin/python3 /home/pi/yt-block/run.py
 Nice=5
