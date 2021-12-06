@@ -1,0 +1,18 @@
+# Sample systemd service file for the youtube blocker app
+[Unit]
+Description=Youtube IoT blocker
+AssertPathExists=/home/pi/yt-block
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+Restart=on-failure
+RestartSec=5s
+Environment="PI_PASSWD="
+ExecStart=/usr/bin/python3 /home/pi/yt-block/run.py
+#ExecStart=PI_PASSWD=%i /usr/bin/python3 /home/pi/yt-block/run.py
+Nice=5
+
+[Install]
+WantedBy=multi-user.target

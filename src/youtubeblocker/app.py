@@ -3,13 +3,15 @@ import time
 
 import RPi.GPIO as io
 from piholeclient.controllers import YouTubeRule
-
 from .controllers import LampController, ButtonController, ResettableTimer
-
+import logging
+import os
 
 class Application():
 
     def __init__(self, client):
+        # Cleanup in case your having been fiddling around in a console.
+        io.cleanup()
         io.setwarnings(False)
         io.setmode(io.BCM)
         self.lamps = LampController(red_pin=19, green_pin=26)
@@ -45,7 +47,7 @@ class Application():
 
     def button_callback(self, channel):
         self.change_in_progress = True
-        # print('Detected button push')
+        print('Detected button push')
         try:
             self.youtube.flip()
             self.deadman_switch.reset()
@@ -55,6 +57,7 @@ class Application():
 
     def timer_callback(self):
         # Fall back to blocking YouTube.
+        print('Timeout. Fallback to blocking youtube')
         self.youtube.block()
         self.deadman_switch.reset()
 

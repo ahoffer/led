@@ -15,7 +15,7 @@ class LampController(object):
 
     def _set(self, pwm, hertz=1, duty_cycle=100):
         pwm.ChangeFrequency(hertz)
-        pwm.ChangeDutyCycle(duty_cycle)
+        pwm.start(duty_cycle)
 
     def _set_fast(self, pwm):
         self._set(pwm, 5, 50)
@@ -63,6 +63,8 @@ class LampController(object):
 class ButtonController:
     def __init__(self, pin, button_callback):
         io.setup(pin, io.IN, pull_up_down=io.PUD_UP)
+        # The event_detect does some debouncing, but the breadboard still
+        # needed 1 nF capacitor across the across the button's poles.
         io.add_event_detect(pin, io.RISING, callback=button_callback)
 
 
