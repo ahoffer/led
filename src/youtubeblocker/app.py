@@ -4,8 +4,7 @@ import time
 import RPi.GPIO as io
 from piholeclient.controllers import YouTubeRule
 
-from ResettableTimer import ResettableTimer
-from controllers import LampController, ButtonController
+from .controllers import LampController, ButtonController, ResettableTimer
 
 
 class Application():
