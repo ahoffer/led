@@ -1,5 +1,6 @@
 #! /usr/bin/python3
 import time
+from sys import stderr
 
 import RPi.GPIO as io
 from piholeclient.controllers import YouTubeRule
@@ -26,15 +27,20 @@ class Application():
         try:
             if self.youtube.youtube_is_blocked():
                 if self.change_in_progress:
+                    print('Set red lamp to fast', file=stderr)
                     self.lamps.fast_red()
                 else:
+                    print('set red lamp to solid', file=stderr)
                     self.lamps.solid_red()
             else:
                 if self.change_in_progress:
+                    print('set green lamp to fast', file=stderr)
                     self.lamps.fast_green()
                 else:
+                    print('set green lamp to solid', file=stderr)
                     self.lamps.solid_green()
-        except:
+        except Exception as e:
+            print('Blinking lamps', file=stderr)
             self.lamps.blink()
 
     def event_loop(self):
@@ -47,7 +53,7 @@ class Application():
 
     def button_callback(self, channel):
         self.change_in_progress = True
-        print('Detected button push')
+        print('Detected button push', file=stderr)
         try:
             self.youtube.flip()
             self.deadman_switch.reset()
@@ -57,7 +63,7 @@ class Application():
 
     def timer_callback(self):
         # Fall back to blocking YouTube.
-        print('Timeout. Fallback to blocking youtube')
+        print('Timeout. Fallback to blocking youtube', file=stderr)
         self.youtube.block()
         self.deadman_switch.reset()
 

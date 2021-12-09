@@ -7,11 +7,12 @@ AssertPathExists=/home/pi/yt-block
 Type=simple
 User=pi
 Group=pi
+# Turn off buffering
+Environment=PYTHONUNBUFFERED=1
 Restart=on-failure
 RestartSec=5s
-Environment="PI_PASSWD=%i"
+# An environment variable is to set to the pihole's password in an override conf file
 ExecStart=/usr/bin/python3 /home/pi/yt-block/run.py
-#ExecStart=PI_PASSWD=%i /usr/bin/python3 /home/pi/yt-block/run.py
 Nice=5
 
 [Install]

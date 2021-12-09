@@ -10,6 +10,26 @@ The LEDs indicate the blocked/unblocked state of YouTube.
 
 
 # Systemd Service
-Hand the password to the service.
+1. Create the service file
+`/etc/systemd/system/yt-block.service`
 
-sudo systemctl start yt-block@<password>.service
+2. Create override conf file for the pihole password `systemctl edit yt-block`
+
+3. Add the environment variable with password
+
+```
+[Service]
+Environment=PI_PASSWD=<password>
+```
+
+4. Start and enable the service
+```
+systemctl daemon-reload
+systemctl start yt-block.service
+systemctl enable yt-block.service
+
+```
+
+To see what is happening
+
+`journalctl -u yt-block`
