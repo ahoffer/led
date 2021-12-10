@@ -31,23 +31,19 @@ class LampController(object):
 
     def blink(self):
         # Alternate LED every half second.
-        # print('BLINK')
         self._set(self.red_pwm, 2, 50)
         time.sleep(0.5)
         self._set(self.green_pwm, 2, 50)
 
     def solid_green(self):
-        # print('SOLID GREEN')
         self._red_off()
         self._set(self.green_pwm, 100, 100)
 
     def solid_red(self):
-        # print('SOLID RED')
         self._green_off()
         self._set_solid(self.red_pwm)
 
     def fast_green(self):
-        # print('FAST GREEN')
         self._red_off()
         self._set_fast(self.green_pwm)
 

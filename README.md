@@ -1,17 +1,17 @@
 # LED Pi project
-Client script that calls a REST API I developed for my Pi-hole. 
-The client script also interacts with the Raspberry Pi's GPIO to drive two LEDs and a button. 
-The button is used to enable/disable blocking YouTube with Pi-hole.
-The LEDs indicate the blocked/unblocked state of YouTube.
 
+Client script that calls a REST API I developed for my Pi-hole. The client script also interacts with the Raspberry Pi's
+GPIO to drive two LEDs and a button. The button is used to enable/disable blocking YouTube with Pi-hole. The LEDs
+indicate the blocked/unblocked state of YouTube.
 
 # From Python Console
-`PI_PASSWD=<password> python3 `
 
+`PI_PASSWD=<password> python3`
 
 # Systemd Service
+
 1. Create the service file
-`/etc/systemd/system/yt-block.service`
+   `/etc/systemd/system/yt-block.service`
 
 2. Create override conf file for the pihole password `systemctl edit yt-block`
 
@@ -23,6 +23,7 @@ Environment=PI_PASSWD=<password>
 ```
 
 4. Start and enable the service
+
 ```
 systemctl daemon-reload
 systemctl start yt-block.service
