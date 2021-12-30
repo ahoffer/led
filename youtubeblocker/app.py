@@ -1,3 +1,4 @@
+import os
 import time
 from sys import stderr
 
@@ -15,13 +16,11 @@ class Application():
         io.cleanup()
         io.setwarnings(False)
         io.setmode(io.BCM)
-        self.lamps = LampController(red_pin=19, green_pin=26)
-        self.button = ButtonController(13, self.button_callback)
+        self.lamps = LampController(red_pin=os.getenv('RED_PIN'), green_pin=os.getenv('GREEN_PIN'))
+        self.button = ButtonController(os.getenv('BUTTON_HIGH_PIN'), self.button_callback)
         self.youtube = YouTubeRule(client)
         self.change_in_progress = False
-        # After 1 hour, revert to blocking the site.
-        one_hour = 60 * 60
-        self.deadman_switch = ResettableTimer(one_hour, self.timer_callback)
+        self.deadman_switch = ResettableTimer(os.getenv('FALLBACK_SECONDS'), self.timer_callback)
 
     def update_lamps(self):
         try:

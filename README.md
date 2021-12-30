@@ -34,3 +34,18 @@ systemctl enable yt-block.service
 To see what is happening
 
 `journalctl -u yt-block`
+
+## Packaging
+
+
+#### Upload to PyPi Test
+
+    python3 -m twine upload --repository testpypi dist/*
+
+    Username: __token__
+    Password: API token
+
+
+#### Install from PyPi Test
+
+    python3 -m pip install --upgrade --index-url https://test.pypi.org/simple/ youtubeblocker

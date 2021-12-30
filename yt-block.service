@@ -9,9 +9,15 @@ User=pi
 Group=pi
 # Turn off buffering
 Environment=PYTHONUNBUFFERED=1
+Environment=RED_PIN=5
+Environment=GREEN_PIN=13
+Environment=BUTTON_HIGH_PIN=4
+# After 1 hour, revert to blocking the site.
+Environment=FALLBACK_SECONDS=3600
 Restart=on-failure
 RestartSec=5s
 # An environment variable is to set to the pihole's password in an override conf file
+# TODO: Move the install location to /opt/yt-block
 ExecStart=/usr/bin/python3 /home/pi/yt-block/run.py
 Nice=5
 
