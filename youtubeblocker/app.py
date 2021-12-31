@@ -8,6 +8,10 @@ from piholeclient.controllers import YouTubeRule
 
 from .controllers import LampController, ButtonController, ResettableTimer
 
+POLLING_SECONDS = 0.25
+
+ONE_HOUR = 60 * 60
+
 
 class Application():
 
@@ -16,27 +20,35 @@ class Application():
         io.cleanup()
         io.setwarnings(False)
         io.setmode(io.BCM)
-        self.lamps = LampController(red_pin=os.getenv('RED_PIN'), green_pin=os.getenv('GREEN_PIN'))
-        self.button = ButtonController(os.getenv('BUTTON_HIGH_PIN'), self.button_callback)
+        red_pin = int(os.getenv('RED_PIN'))
+        green_pin = int(os.getenv('GREEN_PIN'))
+        button_pin = int(os.getenv('BUTTON_HIGH_PIN'))
+        fallback_seconds = int(os.getenv('FALLBACK_SECONDS', ONE_HOUR))
+        logger.info(f'Red LED pin={red_pin}')
+        logger.info(f'Green LED pin={green_pin}')
+        logger.info(f'Button pin={button_pin}')
+        logger.info(f'Fallback seconds={fallback_seconds}')
+        self.lamps = LampController(red_pin, green_pin)
+        self.button = ButtonController(button_pin, self.button_callback)
         self.youtube = YouTubeRule(client)
         self.change_in_progress = False
-        self.deadman_switch = ResettableTimer(os.getenv('FALLBACK_SECONDS'), self.timer_callback)
+        self.deadman_switch = ResettableTimer(fallback_seconds, self.timer_callback)
 
     def update_lamps(self):
         try:
             if self.youtube.youtube_is_blocked():
                 if self.change_in_progress:
-                    logger.debug('Set red lamp to fast')
+                    logger.trace('Set red lamp to fast')
                     self.lamps.fast_red()
                 else:
-                    logger.debug('Set red lamp to solid')
+                    logger.trace('Set red lamp to solid')
                     self.lamps.solid_red()
             else:
                 if self.change_in_progress:
-                    logger.debug('Set green lamp to fast')
+                    logger.trace('Set green lamp to fast')
                     self.lamps.fast_green()
                 else:
-                    logger.debug('Set green lamp to solid')
+                    logger.trace('Set green lamp to solid')
                     self.lamps.solid_green()
         except Exception as e:
             logger.warning('Blinking lamps')
@@ -45,7 +57,7 @@ class Application():
     def event_loop(self):
         try:
             while True:
-                time.sleep(0.25)
+                time.sleep(POLLING_SECONDS)
                 self.update_lamps()
         finally:
             io.cleanup()
@@ -54,6 +66,7 @@ class Application():
         self.change_in_progress = True
         logger.info('Detected button push', file=stderr)
         try:
+            logger.info(f'Attempting to set BLOCKED={not self.youtube.youtube_is_blocked()}')
             self.youtube.flip()
             self.deadman_switch.reset()
         except:

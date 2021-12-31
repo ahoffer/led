@@ -13,7 +13,8 @@ Environment=RED_PIN=5
 Environment=GREEN_PIN=13
 Environment=BUTTON_HIGH_PIN=4
 # After 1 hour, revert to blocking the site.
-Environment=FALLBACK_SECONDS=3600
+Environment=FALLBACK_SECONDS=300
+Environment=LOG_LEVEL=DEBUG
 Restart=on-failure
 RestartSec=5s
 # An environment variable is to set to the pihole's password in an override conf file

@@ -37,7 +37,6 @@ To see what is happening
 
 ## Packaging
 
-
 #### Upload to PyPi Test
 
     python3 -m twine upload --repository testpypi dist/*
@@ -45,7 +44,15 @@ To see what is happening
     Username: __token__
     Password: API token
 
-
 #### Install from PyPi Test
 
-    python3 -m pip install --upgrade --index-url https://test.pypi.org/simple/ youtubeblocker
+    python3 -m pip install --index-url https://test.pypi.org/simple/ youtubeblocker --upgrade
+
+### Service Commands
+
+After changing .service file
+`sudo systemctl daemon-reload`
+
+Restarting the service sudo systemctl restart yt-block.service
+
+View service's log journalctl -u yt-block.service -f
